@@ -118,7 +118,7 @@ const rajarshi = {
 
 <div align="center">
 
-[![Portfolio](https://github-readme-stats.vercel.app/api/pin/?username=rajarshi0822&repo=rajarshi-portfolio&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=7c3aed&icon_color=7c3aed&text_color=c9d1d9)](https://github.com/rajarshi0822/rajarshi-portfolio)
+[![Portfolio](https://github-readme-stats.vercel.app/api/pin/?username=rajarshi0822&repo=rajarshi-portfolio&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=7c3aed&icon_color=7c3aed&text_color=c9d1d9)](https://rajarshi0822.netlify.app/))
 
 </div>
 
