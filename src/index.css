@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg:       #06060f;
+  --surface:  #0d0d1a;
+  --surface2: #121220;
+  --border:   #1c1c35;
+  --accent:   #7c3aed;
+  --accent2:  #06b6d4;
+  --accent3:  #f59e0b;
+  --glow:     rgba(124,58,237,0.25);
+  --text:     #f0eeff;
+  --muted:    #6b6b8a;
+  --muted2:   #9494b8;
+}
+
+/* ── Reset ── */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* ── Smooth scroll with offset for fixed navbar ── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;   /* accounts for fixed navbar height */
+}
+
+/* ── Body ── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+/* ── Noise grain overlay ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9995; opacity: 0.3;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp    { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
+@keyframes fadeIn    { from { opacity:0 } to { opacity:1 } }
+@keyframes float     { 0%,100% { transform:translateY(0) }  50% { transform:translateY(-8px) } }
+@keyframes shimmer   { 0% { background-position:-200% center } 100% { background-position:200% center } }
+@keyframes borderSpin{ to { transform:rotate(360deg) } }
+@keyframes spin      { to { transform:rotate(360deg) } }
+@keyframes pulse-glow{
+  0%,100% { box-shadow:0 0 20px rgba(124,58,237,0.3); }
+  50%      { box-shadow:0 0 40px rgba(124,58,237,0.6); }
+}
+
+/* ── Utility ── */
+.fade-up   { animation: fadeUp 0.7s ease both; }
+.grad-text {
+  background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
