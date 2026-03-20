@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const USERNAME = import.meta.env.VITE_GITHUB_USERNAME;
-const TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+const USERNAME = import.meta.env.VITE_GITHUB_USERNAME || 'rajarshi0822';
+const TOKEN = import.meta.env.VITE_GITHUB_TOKEN || '';
 
 const githubAxios = axios.create({
   baseURL: 'https://api.github.com',
   headers: {
-    Authorization: TOKEN ? `Bearer ${TOKEN}` : '',
+    ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
     Accept: 'application/vnd.github+json',
   },
 });
@@ -22,3 +22,5 @@ export const fetchRepos = async () => {
   });
   return res.data.sort((a, b) => b.stargazers_count - a.stargazers_count);
 };
+
+export const getUsername = () => USERNAME;

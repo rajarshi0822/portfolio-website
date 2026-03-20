@@ -18,9 +18,7 @@ function CustomCursor() {
 
   useEffect(() => {
     if ('ontouchstart' in window) return;
-
     const onMove = (e) => { pos.current = { x: e.clientX, y: e.clientY }; };
-
     const onEnter = (e) => {
       if (!ringRef.current) return;
       if (e.target.closest('a, button')) {
@@ -41,21 +39,17 @@ function CustomCursor() {
         if (dotRef.current) dotRef.current.style.transform = 'scale(1)';
       }
     };
-
     const onClick = (e) => {
       const ripple = document.createElement('div');
       Object.assign(ripple.style, {
-        position: 'fixed',
-        left: `${e.clientX - 20}px`, top: `${e.clientY - 20}px`,
+        position: 'fixed', left: `${e.clientX - 20}px`, top: `${e.clientY - 20}px`,
         width: '40px', height: '40px', borderRadius: '50%',
-        border: '2px solid rgba(124,58,237,0.7)',
-        pointerEvents: 'none', zIndex: '9997',
+        border: '2px solid rgba(124,58,237,0.7)', pointerEvents: 'none', zIndex: '9997',
         animation: 'cursorRipple 0.5s ease forwards',
       });
       document.body.appendChild(ripple);
       setTimeout(() => ripple.remove(), 500);
     };
-
     const animate = () => {
       const lerp = (a, b, t) => a + (b - a) * t;
       ring.current.x = lerp(ring.current.x, pos.current.x, 0.12);
@@ -71,7 +65,6 @@ function CustomCursor() {
       rafId.current = requestAnimationFrame(animate);
     };
     rafId.current = requestAnimationFrame(animate);
-
     window.addEventListener('mousemove', onMove);
     window.addEventListener('click', onClick);
     document.addEventListener('mouseover', onEnter);
@@ -98,8 +91,7 @@ function ScrollReveal({ children, delay = 0, direction = 'up' }) {
   const ref = useRef();
   const [vis, setVis] = useState(false);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const el = ref.current; if (!el) return;
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { setVis(true); obs.disconnect(); }
     }, { threshold: 0.08 });
@@ -147,6 +139,7 @@ function BackToTop() {
 export default function App() {
   const { profile, repos, topRepos, totalStars, totalForks, languageMap, loading, error } = useGitHub();
 
+  // ── Loading spinner
   if (loading) return (
     <div style={{ height:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'1.5rem', background:'#06060f' }}>
       <div style={{ position:'relative', width:56, height:56 }}>
@@ -158,13 +151,17 @@ export default function App() {
     </div>
   );
 
-  if (error) return (
-    <div style={{ height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', color:'#ef4444', fontFamily:'Space Mono', flexDirection:'column', gap:'1rem', background:'#06060f' }}>
-      <span style={{ fontSize:'2rem' }}>⚠️</span>
-      <p>API Error: {error}</p>
-      <p style={{ color:'#6b6b8a', fontSize:'0.75rem' }}>Check your .env GitHub username</p>
-    </div>
-  );
+  // ── Error: show portfolio anyway with empty data (don't block the page)
+  const safeProfile = profile || {
+    login: 'rajarshi0822',
+    name: 'Rajarshi Lakshman',
+    bio: 'Developer · Builder · Open Source Enthusiast',
+    avatar_url: `https://github.com/rajarshi0822.png`,
+    html_url: 'https://github.com/rajarshi0822',
+    public_repos: 0, followers: 0, following: 0,
+  };
+  const safeRepos = repos || [];
+  const safeTopRepos = topRepos || [];
 
   return (
     <>
@@ -185,20 +182,18 @@ export default function App() {
       <BackToTop />
       <Navbar />
 
-      {/* Hero – instant */}
-      <Hero profile={profile} />
+      <Hero profile={safeProfile} />
 
-      {/* About – scrolls to when navbar "About" is clicked */}
       <ScrollReveal direction="up">
-        <About profile={profile} />
+        <About profile={safeProfile} />
       </ScrollReveal>
 
       <ScrollReveal direction="up">
-        <GitHubStats profile={profile} repos={repos} totalStars={totalStars} totalForks={totalForks} languageMap={languageMap} />
+        <GitHubStats profile={safeProfile} repos={safeRepos} totalStars={totalStars||0} totalForks={totalForks||0} languageMap={languageMap||{}} />
       </ScrollReveal>
 
       <ScrollReveal direction="up">
-        <Projects topRepos={topRepos} repos={repos} />
+        <Projects topRepos={safeTopRepos} repos={safeRepos} />
       </ScrollReveal>
 
       <ScrollReveal direction="left">
@@ -206,7 +201,7 @@ export default function App() {
       </ScrollReveal>
 
       <ScrollReveal direction="up">
-        <Contact profile={profile} />
+        <Contact profile={safeProfile} />
       </ScrollReveal>
     </>
   );
